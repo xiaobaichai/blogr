@@ -23,6 +23,7 @@ const routes = [
   {
     path: '/',
     component: BDashboard,
+    redirect: '/home',
     children: [
       { path: 'home', component: BHome },
       { path: 'category', component: BCategory },

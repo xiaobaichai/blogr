@@ -5,10 +5,15 @@
 </template>
 
 <script>
-// export default {
+import { getArticleCount } from '@/api/index.js'
+export default {
+  created () {
+    getArticleCount().then((res) => { console.log(res) })
+  }
+}
 
-// }
-// </script>
+</script>
 
 <style>
+@import './assets/css/normalize.css';
 </style>
