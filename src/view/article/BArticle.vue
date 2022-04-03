@@ -1,13 +1,204 @@
 <template>
-  <div></div>
+  <div class="container">
+    <b-nav></b-nav>
+    <div class="article">
+      <div class="article_l">
+        <div class="article_title">
+          {{article.a_title}}
+          <span>{{'/'+article.a_type}}</span>
+        </div>
+        <div class="article_info">
+          <span class="time">{{article.a_time | getDate}}</span>
+          <span class="views">{{'阅读/'+article.a_views}}</span>
+          <!-- <span class="src">{{article.a_original | isOriginal}}</span> -->
+          <span class="writer">{{'文/'+article.a_author}}</span>
+        </div>
+        <div class="article_desc">{{article.a_desc}}</div>
+        <div class="article_content" v-hljs v-html="article.a_content"></div>
+      </div>
+      <div class="article_r">
+        <!-- 特别推荐 -->
+        <div class="recommend">
+          <p>#特别推荐</p>
+          <div class="recommend-item">
+            <a>
+              <div class="title">山河远阔，人间烟火，无一是你，无一不是你。</div>
+              <div class="info">
+                <span class="time">3 个月内</span>
+                <span class="view">浏览 23</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <b-bottom></b-bottom>
+  </div>
 </template>
 
 <script>
-export default {
+import BNav from '@/components/BNav.vue'
+import BBottom from '@/components/BBottom.vue'
 
+// 引入接口
+import { getArticle } from '@/api/index.js'
+import { mapActions } from 'vuex'
+
+export default {
+  name: 'bArticle',
+  data () {
+    return {
+      article: {
+        a_author: '',
+        a_tags: [],
+        _id: '',
+        a_title: '',
+        a_type: '',
+        a_views: 0,
+        a_content: '',
+        a_desc: '',
+        a_id: '',
+        a_praise: 0,
+        a_original: '',
+        a_time: 0
+      },
+      editorOption: {
+        theme: 'snow'
+      }
+    }
+  },
+  components: { BNav, BBottom },
+  methods: {
+    ...mapActions(['requireTokenAsync']),
+    reqData () {
+      getArticle(this.$route.params.id)
+        .then(response => {
+          if (response.code === 1) {
+            window.location = 'http://www.codecats.top/404.html'
+          } else {
+            this.article = response.data
+            console.log(response)
+          }
+        })
+        .catch(err => {
+          throw err
+        })
+    }
+  },
+  created () {
+    this.reqData()
+  },
+  mounted () {
+    this.requireTokenAsync()
+  }
+  // methods: {
+  //   reqDate() {
+  //     getHomeData()
+  //       .then(response => {
+  //         this.articles = response.data;
+  //         console.log(this.articles);
+  //       })
+  //       .catch(err => {
+  //         throw err;
+  //       });
+  //   }
+  // },
+  // created() {
+  //   this.reqDate();
+  // }
 }
 </script>
 
-<style>
-
+<style lang="less" scoped>
+.container {
+  height: 100%;
+  .article {
+    box-sizing: border-box;
+    min-height: 100%;
+    padding-top: 110px;
+    padding-bottom: 140px;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+    width: 1200px;
+    .article_l {
+      width: 800px;
+      .article_title {
+        margin-bottom: 6px;
+        font-size: 23px;
+        font-weight: 700;
+        span {
+          padding-left: 22px;
+          font-size: 12px;
+          color: #a8acb3;
+        }
+      }
+      .article_info {
+        margin-bottom: 26px;
+        font-size: 12px;
+        color: #999999;
+        span {
+          padding-right: 11px;
+        }
+      }
+      .article_desc {
+        margin-bottom: 42px;
+        padding: 19px 20px 19px 15px;
+        background-color: #fafafa;
+        color: #666666;
+        font-size: 14px;
+        line-height: 24px;
+      }
+      .article_content {
+        overflow: hidden;
+        padding: 0 10px;
+        box-sizing: border-box;
+        text-align: justify;
+        font-size: 14px;
+        p {
+          font-size: 14px;
+          line-height: 30px;
+        }
+      }
+      .article_content ::v-deep pre {
+        margin: 10px 0;
+        border-radius: 5px;
+      }
+    }
+    .article_r {
+      padding-left: 20px;
+      width: 350px;
+      border-left: 1px solid #dddcdc;
+      .recommend {
+        margin-bottom: 40px;
+        p {
+          font-size: 19px;
+          font-weight: 600;
+          margin-bottom: 27px;
+          // color: rgb(78, 61, 235);
+        }
+        .recommend-item {
+          width: 380px;
+          border-bottom: 1px solid #eeeeee;
+          a {
+            display: block;
+            .title {
+              font-size: 14px;
+              font-weight: 600;
+              margin-bottom: 13px;
+            }
+            .info {
+              font-size: 13px;
+              color: #999999;
+              margin-bottom: 14px;
+              .time {
+                margin-right: 8px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
 </style>

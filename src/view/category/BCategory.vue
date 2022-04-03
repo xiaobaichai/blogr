@@ -9,7 +9,6 @@
       <el-pagination
         layout="prev, pager, next"
         background
-        :hide-on-single-page="true"
         @current-change="handleCurrentChange"
         :page-size="8"
         :total="total"
@@ -38,8 +37,84 @@
 </template>
 
 <script>
-export default {
+import ItemArticle from '@/components/ItemArticle.vue'
+// 引入请求接口
+import { getNewArticle, getArticleCount, getCategoryArticle, getCategoryArticleCount } from '@/api/index.js'
 
+export default {
+  name: 'bCategory',
+  data () {
+    return {
+      id: '1234',
+      articles: [],
+      total: 0,
+      category: ['Css/Html', 'JavaScript', 'Vue', 'Node', '其他'],
+      type: 'all'
+    }
+  },
+  components: {
+    ItemArticle
+  },
+  methods: {
+    // 点击分类获取分类文章和文章总数
+    getData ($event) {
+      // 改变分类列表样式
+      const oLi = $event.target
+      const oUl = this.$refs.category_outer
+      const aLi = oUl.children
+      for (let i = 0; i < aLi.length; i++) {
+        aLi[i].className = ''
+      }
+      oLi.className = 'choosen'
+      // 请求分类数据
+      this.type = oLi.dataset.type
+      getCategoryArticle(this.type, 1)
+        .then(response => {
+          this.articles = response.data.data
+        })
+        .catch(err => {
+          throw err
+        })
+      getCategoryArticleCount(this.type)
+        .then((response) => {
+          this.total = response.data.data.count
+        })
+        .catch(err => {
+          throw err
+        })
+    },
+    // 点击分页栏请求文章
+    handleCurrentChange (page) {
+      getCategoryArticle(this.type, page)
+        .then(response => {
+          this.articles = response.data.data
+        })
+        .catch(err => {
+          throw err
+        })
+    },
+    // 进入组件获取最新文章和文章总数
+    reqData () {
+      getNewArticle()
+        .then((response) => {
+          this.articles = response.data.data
+        })
+        .catch(err => {
+          throw err
+        })
+      getArticleCount()
+        .then((response) => {
+          this.total = response.data.data[0].count
+        })
+        .catch(err => {
+          throw err
+        })
+    }
+  },
+  created () {
+    this.reqData()
+  },
+  mounted () {}
 }
 </script>
 

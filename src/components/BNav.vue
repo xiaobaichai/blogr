@@ -11,8 +11,8 @@
           <router-link to="/category" tag="li" active-class="active">技术分类</router-link>
           <router-link to="/message" tag="li" active-class="active">留言板</router-link>
           <router-link to="/source" tag="li" active-class="active">资源推荐</router-link>
-          <router-link to="/user" tag="li" active-class="active" v-if="token">
-            <img class="avatar" :src="user_info.avatarSrc" alt width="50" height="50" />
+          <router-link to="/user" tag="li" active-class="active" v-if="userId">
+            <img class="avatar" :src="userInfo.avatar_src" alt width="50" height="50" />
           </router-link>
           <router-link to="/user" tag="li" active-class="active" v-else>登录/注册</router-link>
         </ul>
@@ -25,7 +25,15 @@
 
 <script>
 export default {
-
+  name: 'bNav',
+  computed: {
+    userId: function () {
+      return this.$store.state.userId
+    },
+    userInfo: function () {
+      return this.$store.state.userInfo
+    }
+  }
 }
 </script>
 

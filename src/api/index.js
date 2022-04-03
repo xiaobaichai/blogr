@@ -56,19 +56,31 @@ export const getNewArticle = () => {
 // 按照分页获取热门内容（预览内容）
 export const getHotArticle = () => {
   return axios({
-    url: '/api/hot_article',
+    url: '/api/hot_articles',
     method: 'get'
   })
 }
 
 // 分类页==============================================================
-// 根据分类获取文章（预览内容）
-export const getCategoryArticleCount = (data) => {
+// 根据分类获取文章总数做分页
+export const getCategoryArticleCount = (type) => {
   return axios({
-    url: '/api/category_article_count',
+    url: '/api/category_articles_count',
     method: 'get',
     params: {
-      tag: data.tag
+      tag: type
+    }
+  })
+}
+
+// 根据分类获取文章（预览内容）
+export const getCategoryArticle = (type, page) => {
+  return axios({
+    url: '/api/category_articles',
+    method: 'get',
+    params: {
+      tag: type,
+      page: page
     }
   })
 }
@@ -83,10 +95,14 @@ export const getMessageCount = () => {
 }
 
 // 按照分页获取最新留言
-export const getNewMessage = () => {
+export const getNewMessage = (count, page) => {
   return axios({
-    url: '/api/new_message',
-    method: 'get'
+    url: '/api/new_messages',
+    method: 'get',
+    params: {
+      count: count,
+      page: page
+    }
   })
 }
 

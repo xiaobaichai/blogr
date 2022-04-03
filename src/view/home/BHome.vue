@@ -3,7 +3,7 @@
     <!-- 轮播图 -->
     <div class="carousel">
       <div class="carousel-l">
-        <el-carousel height="330px">
+        <el-carousel :interval="2000" type="card" height="330px">
           <el-carousel-item v-for="item in carousel" :key="item.id">
             <router-link :to="'/article/' + item.c_link" target="_blank">
               <img :src="item.c_imgSrc" alt width="790" height="330" />
@@ -38,6 +38,13 @@
       <div class="content-l">
         <p>#最新内容</p>
         <item-article :articles="articles"></item-article>
+        <el-pagination
+        layout="prev, pager, next"
+        background
+        @current-change="handleCurrentChange"
+        :page-size="8"
+        :total="total"
+      ></el-pagination>
       </div>
       <div class="content-r">
         <!-- 热门板块 -->
@@ -104,13 +111,102 @@
 </template>
 
 <script>
+// 引入组件
+import ItemArticle from '@/components/ItemArticle.vue'
+
+// 引入首页接口
+import {
+  getArticleCount,
+  getNewArticle,
+  getHotArticle,
+  getCategoryArticle,
+  getMsg,
+  getCarousel
+} from '@/api/index.js'
 
 export default {
-
+  name: 'bHome',
+  data () {
+    return {
+      articleCount: 0,
+      articles: [],
+      newArticles: [],
+      hotArticles: [],
+      tags: [],
+      keyword: '',
+      msgs: [],
+      carousel: [],
+      total: 9
+    }
+  },
+  components: {
+    ItemArticle
+  },
+  methods: {
+    // 点击分页栏请求文章
+    handleCurrentChange (page) {
+      getCategoryArticle('all', page)
+        .then(response => {
+          this.articles = response.data.data
+        })
+        .catch(err => {
+          throw err
+        })
+    },
+    // 页面加载请求数据
+    reqDate () {
+      getArticleCount() // 获取首页文章总数
+        .then(response => {
+          this.articleCount = response.data.data[0].count
+        })
+        .catch(err => {
+          throw err
+        })
+      getNewArticle() // 获取首页最新文章
+        .then(response => {
+          this.newArticles = response.data.data
+          this.articles = this.newArticles
+        })
+        .catch(err => {
+          throw err
+        })
+      getHotArticle() // 获取首页热门文章
+        .then(response => {
+          this.hotArticles = response.data.data
+        })
+        .catch(err => {
+          throw err
+        })
+      getMsg(5, 1) // 获取首页留言（5条，第1页）
+        .then(response => {
+          this.msgs = response.data
+        })
+        .catch(err => {
+          throw err
+        })
+      getCarousel().then(response => {
+        this.carousel = response.data
+      }) // 获取首页轮播图
+    },
+    // 搜索
+    search ($event) {
+      const keyword = this.keyword
+      if (event.keyCode === '13') {
+        const routeUrl = this.$router.resolve({
+          path: '/searchKeyword/' + keyword
+          // params: { keyword }
+        })
+        window.open(routeUrl.href, '_blank')
+      }
+    }
+  },
+  created () {
+    this.reqDate()
+  }
 }
 </script>
 
-<style lang=less scoped>
+<style lang='less' scoped>
 .home-content {
   width: 1200px;
   margin: 0 auto;
@@ -209,6 +305,10 @@ export default {
         font-weight: 700;
         margin-bottom: 24px;
       }
+      .el-pagination {
+      text-align: center;
+      margin-bottom: 20px;
+    }
     }
     .content-r {
       box-sizing: border-box;

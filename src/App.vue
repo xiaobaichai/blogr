@@ -5,11 +5,9 @@
 </template>
 
 <script>
-import { getArticleCount } from '@/api/index.js'
+
 export default {
-  created () {
-    getArticleCount().then((res) => { console.log(res) })
-  }
+
 }
 
 </script>

@@ -12,12 +12,13 @@ import BNav from '@/components/BNav.vue'
 import BBottom from '@/components/BBottom.vue'
 
 export default {
+  name: 'bDashboard',
   components: { BNav, BBottom },
   methods: {
 
   },
   mounted () {
-
+    this.$store.dispatch('getUserAcountAsync')
   }
 }
 </script>

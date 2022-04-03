@@ -26,10 +26,32 @@
 </template>
 
 <script>
+// 引入组件
 import BLogin from '@/view/login/BLogin.vue'
 
+import { mapState } from 'vuex'
+
+import { logout } from '@/api/index.js'
+
 export default {
-  components: { BLogin }
+  name: 'bUser',
+  components: { BLogin },
+  computed: {
+    ...mapState(['token', 'user_info'])
+  },
+  methods: {
+    logOut () {
+      logout()
+        .then(response => {
+          if (response.code === 0) {
+            window.location.reload()
+          }
+        })
+        .catch(err => {
+          throw err
+        })
+    }
+  }
 }
 </script>
 

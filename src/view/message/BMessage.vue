@@ -63,8 +63,81 @@
 </template>
 
 <script>
-export default {
+// 引入接口
+import { leaveMessage, getNewMessage } from '@/api/index.js'
 
+export default {
+  name: 'bMessage',
+  data () {
+    return {
+      nickname: '',
+      email: '',
+      content: '',
+      msgs: [],
+      count: 1, // 每次请求留言条数
+      total: 0
+    }
+  },
+  methods: {
+    // 提交留言
+    submit () {
+      // 表单校验
+      if (this.nickname === '') {
+        this.$message('请输入昵称')
+        return
+      }
+      if (
+        !/\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/.test(
+          this.email
+        )
+      ) {
+        this.$message('请输入正确邮箱')
+        return
+      }
+      if (this.content === '') {
+        this.$message('请输入留言内容')
+        return
+      }
+      leaveMessage(this.nickname, this.email, this.content)
+        .then(response => {
+          if (response.code === 1) {
+            this.$message(response.message)
+          }
+          // 清空留言
+          this.nickname = ''
+          this.email = ''
+          this.content = ''
+          window.location.reload()
+        })
+        .catch(err => {
+          throw err
+        })
+    },
+    // 请求首页最新留言数据
+    reqData () {
+      getNewMessage(this.count, 1)
+        .then(response => {
+          console.log(response)
+          this.msgs = response.data.data
+        })
+        .catch(err => {
+          throw err
+        })
+    },
+    // 请求分页最新留言数据
+    getPageMsg (page) {
+      getNewMessage(this.count, page)
+        .then(response => {
+          this.msgs = response.data
+        })
+        .catch(err => {
+          throw err
+        })
+    }
+  },
+  created () {
+    this.reqData()
+  }
 }
 </script>
 
