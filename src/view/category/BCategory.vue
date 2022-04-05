@@ -77,7 +77,7 @@ export default {
         })
       getCategoryArticleCount(this.type)
         .then((response) => {
-          this.total = response.data.data.count
+          this.total = response.data.data[0].count
         })
         .catch(err => {
           throw err
@@ -104,6 +104,7 @@ export default {
         })
       getArticleCount()
         .then((response) => {
+          console.log('进入页面时的total:' + response.data.data[0].count)
           this.total = response.data.data[0].count
         })
         .catch(err => {

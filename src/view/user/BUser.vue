@@ -1,16 +1,16 @@
 <template>
   <div class="profile">
     <!-- 登陆状态 -->
-    <div class="user" v-if="token">
+    <div class="user" v-if="userId">
       <div class="user_l">
-        <img class="avatar" :src="user_info.avatarSrc" alt width="100" height="100" />
-        <p class="user_name">{{ user_info.name }}</p>
+        <img class="avatar" :src="userInfo.avatarSrc" alt width="100" height="100" />
+        <p class="user_name">{{ userInfo.name }}</p>
         <p class="user_sign">
           <span>个人简介:</span>
-          {{ user_info.sign }}
+          {{ userInfo.sign }}
         </p>
         <div class="logOut" @click="logOut">退出登录</div>
-        <div class="operation" v-show="user_info.name === 'randy'">
+        <div class="operation" v-show="userInfo.name === 'randy'">
           <router-link to="/editor" target="_blank" class="edition">文章上传</router-link>
           <router-link to="/resMsg" target="_blank" class="resMsg">留言回复</router-link>
           <router-link to="/uploadCarousel" target="_blank" class="uploadCarousel">上传轮播图</router-link>
@@ -29,21 +29,25 @@
 // 引入组件
 import BLogin from '@/view/login/BLogin.vue'
 
-import { mapState } from 'vuex'
-
 import { logout } from '@/api/index.js'
 
 export default {
   name: 'bUser',
   components: { BLogin },
   computed: {
-    ...mapState(['token', 'user_info'])
+    userId () {
+      return this.$store.state.userId
+    },
+    userInfo () {
+      return this.$store.state.userInfo
+    }
   },
   methods: {
     logOut () {
       logout()
         .then(response => {
-          if (response.code === 0) {
+          if (response.data.code === 0) {
+            this.$message(response.data.message)
             window.location.reload()
           }
         })
@@ -76,7 +80,7 @@ export default {
         margin: 15px auto;
         padding: 6px 0;
         font-size: 14px;
-        background-color: rgb(69, 173, 243);
+        background-color: rgb(52, 129, 245);
         border-radius: 4px;
         color: rgb(241, 241, 241);
         cursor: pointer;

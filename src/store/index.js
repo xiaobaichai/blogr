@@ -16,8 +16,8 @@ export default new Vuex.Store({
   },
   mutations: { // 同步修改state中的数据，必须的
     initUserAcount (state, response) {
-      state.userId = response.data.user_id
-      state.userInfo = response.data.user_info
+      state.userId = response.data.data.user_id
+      state.userInfo = response.data.data.user_info
     }
   },
   actions: { // 提交mutation，即异步修改state中的数据，有异步操作时必须的

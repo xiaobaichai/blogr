@@ -1,31 +1,29 @@
 <template>
-    <div class="login">
-    <div class="login_title">
-      <el-button type="primary" size="medium " style="width:49%" @click="dealFlag(true)">登录</el-button>
-      <el-button type="primary" size="medium " style="width:49%" @click="dealFlag(false)">注册</el-button>
-    </div>
-    <form>
+<div class="login_outer">
+  <div class="login">
       <!-- 登录部分 -->
-      <div :class="{current:flag}">
+      <div class="current" v-show="flag">
         <el-input v-model="login_user" placeholder="用户名(登录)"></el-input>
         <el-input v-model="login_pwd" placeholder="密码(登录)" show-password></el-input>
         <el-button type="primary" size="medium " style="width:100%" @click="userLogin">登录</el-button>
+        <p><span>还未注册？</span><span class="hover" @click="dealFlag()">注册</span></p>
       </div>
       <!-- 注册部分 -->
-      <div :class="{current:!flag}">
-        <el-input v-model="register_user" placeholder="用户名(注册)"></el-input>
+      <div class="current" v-show="!flag">
+        <el-input v-model="register_nickname" placeholder="用户名(注册)"></el-input>
         <el-input v-model="register_pwd" placeholder="密码(注册)" show-password></el-input>
+        <el-input v-model="register_email" placeholder="邮箱"></el-input>
         <el-button type="primary" size="medium " style="width:100%" @click="userRegist">注册</el-button>
+        <p><span>已注册？</span><span class="hover" @click="dealFlag()">登录</span></p>
       </div>
-    </form>
   </div>
+</div>
+
 </template>
 
 <script>
 // 引入接口
 import { regist, login } from '@/api/index.js'
-
-import { mapMutations } from 'vuex'
 
 export default {
   name: 'bLogin',
@@ -34,14 +32,15 @@ export default {
       flag: true,
       login_user: '',
       login_pwd: '',
-      register_user: '',
-      register_pwd: ''
+      register_nickname: '',
+      register_pwd: '',
+      register_email: ''
     }
   },
   methods: {
-    ...mapMutations(['INIT_USER_INFO']),
-    dealFlag (flag) {
-      this.flag = flag
+    dealFlag () {
+      this.flag = !this.flag
+      console.log('hh')
     },
     // 登录
     userLogin () {
@@ -51,17 +50,19 @@ export default {
       }
       login(this.login_user, this.login_pwd)
         .then(response => {
-          if (response.code === 1) {
-            this.$message(response.message)
+          if (response.data.code === 1) {
+            this.$message(response.data.message)
+            return
           }
-          if (response.code === 2) {
-            this.$message(response.message)
+          if (response.data.code === 2) {
+            this.$message(response.data.message)
+            return
           }
-          if (response.code === 0) {
-            this.$message(response.message)
+          if (response.data.code === 0) {
+            this.$message(response.data.message)
             this.login_pwd = ''
             this.login_user = ''
-            this.INIT_USER_INFO(response)
+            this.$store.dispatch('getUserAcountAsync')
           }
         })
         .catch(err => {
@@ -70,22 +71,32 @@ export default {
     },
     // 注册
     userRegist () {
-      if (this.register_user === '' || this.register_pwd === '') {
+      if (this.register_nickname === '' || this.register_pwd === '' || this.register_email === '') {
         this.$message('请填写完整信息')
+        this.register_user = ''
+        this.register_pwd = ''
+        this.register_email = ''
         return
       }
-      regist(this.register_user, this.register_pwd)
+      if (!(/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/.test(this.register_email))) {
+        this.$message('请填写正确邮箱')
+        this.register_email = ''
+        return
+      }
+      regist(this.register_nickname, this.register_pwd)
         .then(response => {
-          if (response.code === 1) {
-            this.$message(response.message)
-          }
-          if (response.code === 2) {
-            this.$message(response.message)
-          }
-          if (response.code === 0) {
-            this.$message(response.message)
+          if (response.data.code === 1) {
+            this.$message(response.data.message)
             this.register_user = ''
             this.register_pwd = ''
+            this.register_email = ''
+          }
+          if (response.data.code === 0) {
+            this.$message(response.data.message)
+            this.register_user = ''
+            this.register_pwd = ''
+            this.register_email = ''
+            this.flag = !this.flag
           }
         })
         .catch(err => {
@@ -97,45 +108,23 @@ export default {
 </script>
 
 <style lang='less' scoped>
-.login {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 2;
-  background: url("http://www.codecats.top/public/img/loginBg.webp") no-repeat
-    center center;
-  background-size: cover;
-  .login_title {
-    box-sizing: border-box;
-    width: 700px;
-    padding: 20px 0;
-    position: absolute;
-    left: 50%;
-    top: 25%;
-    transform: translate(-50%, -50%);
-    // border: 1px solid red;
-  }
-  form {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -30%);
-    // margin: 0 auto;
-    width: 700px;
-    height: 600px;
-    // border: 1px solid greenyellow;
-    > div {
-      display: none;
+.login_outer{
+  .login{
+    width: 500px;
+    margin: 12% auto 50px;
+    .current{
+      .hover{
+        color: rgb(28, 132, 230);
+      }
+      .hover:hover{
+        cursor: pointer;
+      }
     }
-    div .el-input {
+    .el-input{
       margin-bottom: 30px;
-      background-color: rgba(red,0.5);
     }
-    .current {
-      display: block;
+    .el-button{
+      margin-bottom: 15px;
     }
   }
 }

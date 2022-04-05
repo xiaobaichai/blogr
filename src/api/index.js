@@ -1,6 +1,8 @@
 // 基于axios封装网络请求
 import Axios from 'axios'
 
+Axios.defaults.withCredentials = true
+
 // 这里的axios即添加了自定义配置的axios()
 const myAxios = Axios.create({
   baseURL: 'http://localhost:3000',
@@ -89,18 +91,17 @@ export const getCategoryArticle = (type, page) => {
 // 获取留言总数做分页加载
 export const getMessageCount = () => {
   return axios({
-    url: '/api/article_count',
+    url: '/api/message_count',
     method: 'get'
   })
 }
 
 // 按照分页获取最新留言
-export const getNewMessage = (count, page) => {
+export const getNewMessage = (page) => {
   return axios({
     url: '/api/new_messages',
     method: 'get',
     params: {
-      count: count,
       page: page
     }
   })
@@ -159,35 +160,46 @@ export const leaveMessageComment = (data) => {
 
 // 资源页===================================================================
 // 获取所有分类的资源
-export const getSource = () => {
+export const getCategorySource = (item) => {
   return axios({
-    url: '/api/source',
-    method: 'get'
+    url: '/api/category_source',
+    method: 'get',
+    params: {
+      category: item
+    }
   })
 }
 
 // 注册登录页===============================================================
 // 注册
-export const regist = (data) => {
+export const regist = (nickname, password) => {
   return axios({
     url: '/api/regist',
     method: 'post',
     data: {
-      nickname: data.nickname,
-      password: data.password
+      nickname: nickname,
+      password: password
     }
   })
 }
 
 // 登录
-export const login = (data) => {
+export const login = (nickname, password) => {
   return axios({
-    url: '/api/article_count',
+    url: '/api/login',
     method: 'post',
     data: {
-      nickname: data.nickname,
-      password: data.password
+      nickname: nickname,
+      password: password
     }
+  })
+}
+
+// 登出
+export const logout = () => {
+  return axios({
+    url: '/api/logout',
+    method: 'get'
   })
 }
 

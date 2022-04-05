@@ -21,7 +21,7 @@
           <div class="msg-content">
             <div class="user-content">
               <span class="nickname">{{ item.m_nickname + ": " }}</span>
-              <span class="msg">{{ item.m_content }}</span>
+              <span class="msg">{{ item.content }}</span>
             </div>
             <div class="admin-content">
               <span class="admin">管理员：</span>
@@ -33,7 +33,7 @@
       <el-pagination
         background
         layout="prev, pager, next"
-        :hide-on-single-page="true"
+        :page-size="8"
         :total="total"
         @current-change="getPageMsg"
       ></el-pagination>
@@ -64,7 +64,7 @@
 
 <script>
 // 引入接口
-import { leaveMessage, getNewMessage } from '@/api/index.js'
+import { leaveMessage, getNewMessage, getMessageCount } from '@/api/index.js'
 
 export default {
   name: 'bMessage',
@@ -74,7 +74,6 @@ export default {
       email: '',
       content: '',
       msgs: [],
-      count: 1, // 每次请求留言条数
       total: 0
     }
   },
@@ -115,10 +114,16 @@ export default {
     },
     // 请求首页最新留言数据
     reqData () {
-      getNewMessage(this.count, 1)
+      getNewMessage(1)
         .then(response => {
-          console.log(response)
           this.msgs = response.data.data
+        })
+        .catch(err => {
+          throw err
+        })
+      getMessageCount()
+        .then(response => {
+          this.total = response.data.data[0].count
         })
         .catch(err => {
           throw err
@@ -126,9 +131,9 @@ export default {
     },
     // 请求分页最新留言数据
     getPageMsg (page) {
-      getNewMessage(this.count, page)
+      getNewMessage(page)
         .then(response => {
-          this.msgs = response.data
+          this.msgs = response.data.data
         })
         .catch(err => {
           throw err
