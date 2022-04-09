@@ -25,7 +25,7 @@
           </div>
           <div class="search-input">
             <i class="el-icon-search"></i>
-            <input type="text" v-model="keyword" @keypress="search($event)" />
+            <input type="text" v-model="keyword" placeholder="搜索文章" @keypress="search($event)" />
           </div>
         </div>
         <div class="search-img">
@@ -50,9 +50,9 @@
         <!-- 热门板块 -->
         <div class="hot">
           <p>#热门板块</p>
-          <div class="hot-item" v-for="item in hotArticles" :key="item.time">
-            <router-link :to="'/article/' + item.a_id" tag="a" target="_blank">
-              <div class="title">{{ item.a_title }}</div>
+          <div class="hot-item" v-for="item in hotArticles" :key="item.id">
+            <router-link :to="'/article/' + item.id" tag="a" target="_blank">
+              <div class="title">{{ item.title }}</div>
               <div class="info">
                 <span class="time">{{ item.a_time | getDate }}</span>
                 <span class="view">{{ "浏览" + item.a_views }}</span>
@@ -61,7 +61,7 @@
           </div>
         </div>
         <!-- 热门标签 -->
-        <div class="tags">
+        <!-- <div class="tags">
           <p>#热门标签</p>
           <div class="tag_item">
             <router-link
@@ -72,7 +72,7 @@
               :key="item"
             >{{ item }}</router-link>
           </div>
-        </div>
+        </div> -->
         <!-- 最新留言 -->
         <div class="msg">
           <p>#最新留言</p>
@@ -80,12 +80,12 @@
             <div class="msg-time">{{ item.m_rTime }}</div>
             <div class="msg-content">
               <div class="user-content">
-                <span class="nickname">{{ item.m_nickname + ": " }}</span>
-                <span class="msg">{{ item.m_content }}</span>
+                <span class="nickname">{{ item.nickname + ": " }}</span>
+                <span class="msg">{{ item.content }}</span>
               </div>
               <div class="admin-content">
                 <span class="admin">管理员：</span>
-                <span class="response">{{ item.m_response }}</span>
+                <span class="response">{{ item.response }}</span>
               </div>
             </div>
           </div>
@@ -119,8 +119,7 @@ import {
   getArticleCount,
   getNewArticle,
   getHotArticle,
-  getCategoryArticle,
-  getMsg,
+  getNewMessage,
   getCarousel
 } from '@/api/index.js'
 
@@ -145,7 +144,7 @@ export default {
   methods: {
     // 点击分页栏请求文章
     handleCurrentChange (page) {
-      getCategoryArticle('all', page)
+      getNewArticle(page, 8) // 请求第page页 8篇
         .then(response => {
           this.articles = response.data.data
         })
@@ -162,24 +161,23 @@ export default {
         .catch(err => {
           throw err
         })
-      getNewArticle() // 获取首页最新文章
+      getNewArticle(1, 8) // 获取首页最新文章第一页 8篇
         .then(response => {
-          this.newArticles = response.data.data
-          this.articles = this.newArticles
+          this.articles = response.data.data
         })
         .catch(err => {
           throw err
         })
-      getHotArticle() // 获取首页热门文章
+      getHotArticle(4) // 获取首页热门文章 4篇
         .then(response => {
           this.hotArticles = response.data.data
         })
         .catch(err => {
           throw err
         })
-      getMsg(5, 1) // 获取首页留言（5条，第1页）
+      getNewMessage(1, 4) // 获取首页留言 第1页 4条
         .then(response => {
-          this.msgs = response.data
+          this.msgs = response.data.data
         })
         .catch(err => {
           throw err
@@ -261,7 +259,7 @@ export default {
             position: absolute;
             left: 30px;
             top: 12px;
-            color: #c2cad3;
+            color: #7f8285;
             font-size: 16px;
           }
           input {
@@ -269,7 +267,7 @@ export default {
             height: 40px;
             padding-left: 35px;
             border-radius: 20px;
-            background: #fafafa;
+            background: #f1f1f1;
             outline: none;
             border: none;
             font-size: 14px;
@@ -330,6 +328,9 @@ export default {
           width: 380px;
           border-bottom: 1px solid #eeeeee;
           margin-bottom: 20px;
+          :hover {
+            color: rgb(32, 127, 236);
+            }
           a {
             display: block;
             .title {

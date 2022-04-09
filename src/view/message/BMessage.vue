@@ -114,7 +114,7 @@ export default {
     },
     // 请求首页最新留言数据
     reqData () {
-      getNewMessage(1)
+      getNewMessage(1, 8)
         .then(response => {
           this.msgs = response.data.data
         })
@@ -131,7 +131,7 @@ export default {
     },
     // 请求分页最新留言数据
     getPageMsg (page) {
-      getNewMessage(page)
+      getNewMessage(page, 8)
         .then(response => {
           this.msgs = response.data.data
         })

@@ -15,23 +15,7 @@
       ></el-pagination>
     </div>
     <div class="category_r">
-      <!-- <div class="hot">
-        <p>热门板块</p>
-        <router-link :to="'/article/'+id" tag="a" target="_blank" class="hot-item">
-          <div class="hot-l">
-            <img src alt width="90" height="80" />
-          </div>
-          <div class="hot_r">
-            <a>
-              <div class="title">山河远阔，人间烟火，无一是你，无一不是你。</div>
-              <div class="info">
-                <span class="time">3 个月内</span>
-                <span class="view">浏览 23</span>
-              </div>
-            </a>
-          </div>
-        </router-link>
-      </div>-->
+      推荐
     </div>
   </div>
 </template>
@@ -39,7 +23,7 @@
 <script>
 import ItemArticle from '@/components/ItemArticle.vue'
 // 引入请求接口
-import { getNewArticle, getArticleCount, getCategoryArticle, getCategoryArticleCount } from '@/api/index.js'
+import { getNewArticle, getCategoryArticle, getCategoryArticleByPage, getCategoryArticleCount } from '@/api/index.js'
 
 export default {
   name: 'bCategory',
@@ -68,7 +52,7 @@ export default {
       oLi.className = 'choosen'
       // 请求分类数据
       this.type = oLi.dataset.type
-      getCategoryArticle(this.type, 1)
+      getCategoryArticle(this.type, 8)
         .then(response => {
           this.articles = response.data.data
         })
@@ -85,7 +69,7 @@ export default {
     },
     // 点击分页栏请求文章
     handleCurrentChange (page) {
-      getCategoryArticle(this.type, page)
+      getCategoryArticleByPage(this.type, page, 8) // 按分类获取第page页文章8篇
         .then(response => {
           this.articles = response.data.data
         })
@@ -95,16 +79,15 @@ export default {
     },
     // 进入组件获取最新文章和文章总数
     reqData () {
-      getNewArticle()
+      getNewArticle(1, 8)
         .then((response) => {
           this.articles = response.data.data
         })
         .catch(err => {
           throw err
         })
-      getArticleCount()
+      getCategoryArticleCount(this.type)
         .then((response) => {
-          console.log('进入页面时的total:' + response.data.data[0].count)
           this.total = response.data.data[0].count
         })
         .catch(err => {

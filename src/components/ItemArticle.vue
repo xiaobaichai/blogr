@@ -5,17 +5,22 @@
         <div class="item-l fl">
           <div class="row-type">
             <span class="type-icon"></span>
-            <span class="type-content">{{item.a_type}}</span>
+            <span class="type-content">{{item.tag}}</span>
           </div>
           <div class="row-title">{{item.title}}</div>
           <div class="row-brief">{{item.pre_content}}</div>
           <div class="row-info">
-            <span class="info-time">{{item.a_time | getDate}}</span>
-            <span class="info-view">{{'浏览' +item.a_views}}</span>
+            <i class="iconfont icon-eye"></i>
+            <span class="info-view">{{item.read_count}}</span>
+            <i class="iconfont icon-icon"></i>
+            <span class="info-agree">{{item.read_count}}</span>
+            <i class="iconfont icon-shoucang"></i>
+            <span class="info-collection">{{item.read_count}}</span>
+                        <span class="info-time">{{a}}</span>
           </div>
         </div>
         <div class="item-r fr">
-          <img v-lazy="item.a_imgSrc" alt width="132" height="132" />
+          <img v-lazy="item.a_imgSrc" alt width="120" height="100" />
         </div>
       </router-link>
     </div>
@@ -40,11 +45,14 @@ export default {
   margin-bottom: 15px;
   box-sizing: border-box;
   width: 790px;
-  padding: 0 30px 29px 10px;
+  padding: 0 30px 18px 10px;
   border-bottom: 1px solid #eeeeee;
+  :hover > .row-title {
+    color: rgb(32, 127, 236);
+  }
   //item左侧简介
   .item-l {
-    width: 615px;
+    width: 540px;
     .row-type {
       margin-bottom: 8px;
       .type-icon {
@@ -55,26 +63,36 @@ export default {
         border-radius: 50%;
         vertical-align: middle;
       }
+      .type-content {
+        font-size: 14px;
+      }
     }
     .row-title {
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 600;
       margin-bottom: 12px;
     }
     .row-brief {
       height: 36px;
-      font-size: 12px;
+      font-size: 14px;
       color: #999999;
-      margin-bottom: 15px;
+      // margin-bottom: 15px;
       overflow: hidden;
+      white-space: nowrap;
       text-overflow: ellipsis;
-      display: -webkit-box;
+      display: block;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
     }
     .row-info {
-      font-size: 12px;
+      font-size: 14px;
       color: #999999;
+      i {
+        margin-right: 6px;
+      }
+      span {
+        margin-right: 30px;
+      }
       .info-time {
         margin-right: 15px;
       }

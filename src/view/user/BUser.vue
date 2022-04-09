@@ -3,7 +3,11 @@
     <!-- 登陆状态 -->
     <div class="user" v-if="userId">
       <div class="user_l">
-        <img class="avatar" :src="userInfo.avatarSrc" alt width="100" height="100" />
+        <div class="avatar">
+          <img :src="userInfo.avatar_src" alt width="100" height="100" />
+          <p><i class="iconfont icon-xiugai"></i><span>修改头像</span></p>
+          <input type="file" name="img" ref="file" @change="upload">
+        </div>
         <p class="user_name">{{ userInfo.name }}</p>
         <p class="user_sign">
           <span>个人简介:</span>
@@ -29,7 +33,7 @@
 // 引入组件
 import BLogin from '@/view/login/BLogin.vue'
 
-import { logout } from '@/api/index.js'
+import { logout, uploadAvatar } from '@/api/index.js'
 
 export default {
   name: 'bUser',
@@ -46,6 +50,25 @@ export default {
     logOut () {
       logout()
         .then(response => {
+          if (response.data.code === 0) {
+            this.$message(response.data.message)
+            window.location.reload()
+          }
+        })
+        .catch(err => {
+          throw err
+        })
+    },
+    upload () {
+      console.log('onchange')
+      const formdata = new FormData()
+      formdata.append('file', this.$refs.file.files[0])
+      formdata.append('userId', this.userId)
+      uploadAvatar(formdata)
+        .then(response => {
+          if (response.data.code === 1) {
+            this.$message(response.data.message)
+          }
           if (response.data.code === 0) {
             this.$message(response.data.message)
             window.location.reload()
@@ -103,10 +126,44 @@ export default {
         }
       }
       .avatar {
+        position: relative;
+        width: 100px;
+        height: 100px;
         display: block;
         margin: 0 auto;
         margin-bottom: 15px;
         border-radius: 50%;
+        :hover{
+          cursor: pointer;
+        }
+        &:hover p {
+          opacity: 0.9;
+        }
+        &:hover img {
+          opacity: 0.4;
+        }
+        img {
+          border-radius: 50%;
+        }
+        input {
+          position: absolute;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          right: 0;
+          opacity: 0;
+          display: block;
+          border-radius: 50%;
+        }
+        p {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100px;
+          line-height: 100px;
+          margin-left: 10px;
+          opacity: 0;
+        }
       }
       .user_name {
         margin-bottom: 15px;

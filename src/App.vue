@@ -14,4 +14,5 @@ export default {
 
 <style>
 @import './assets/css/normalize.css';
+@import './assets/css/iconfont.css';
 </style>

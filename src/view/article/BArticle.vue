@@ -18,18 +18,7 @@
       </div>
       <div class="article_r">
         <!-- 特别推荐 -->
-        <div class="recommend">
-          <p>#特别推荐</p>
-          <div class="recommend-item">
-            <a>
-              <div class="title">山河远阔，人间烟火，无一是你，无一不是你。</div>
-              <div class="info">
-                <span class="time">3 个月内</span>
-                <span class="view">浏览 23</span>
-              </div>
-            </a>
-          </div>
-        </div>
+        相关文章
       </div>
     </div>
     <b-bottom></b-bottom>
