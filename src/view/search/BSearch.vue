@@ -5,7 +5,7 @@
       <div class="search_result">
         <div class="result_center">
           <p class="tag">{{$route.params.tag}}</p>
-          <p class="result">{{'找到了'+articles.length+'条相关博文'}}</p>
+          <p class="result">{{'找到了'+articles.length+'条与‘'+keyword+'’相关的文章'}}</p>
         </div>
       </div>
       <div class="search_content">
@@ -26,9 +26,8 @@ import BNav from '@/components/BNav.vue'
 import BBottom from '@/components/BBottom.vue'
 import ItemArticle from '@/components/ItemArticle.vue'
 
-import { mapActions } from 'vuex'
 // 引入接口
-import { getSearchKeyword } from '@/api/index.js'
+import { searchKeyword } from '@/api/index.js'
 
 export default {
   name: 'bSearch',
@@ -37,18 +36,22 @@ export default {
       articles: []
     }
   },
+  computed: {
+    keyword: function () {
+      return this.$route.query.keyword
+    }
+  },
   components: {
     BNav,
     BBottom,
     ItemArticle
   },
   methods: {
-    ...mapActions(['requireTokenAsync']),
     reqDate () {
-      getSearchKeyword(this.$route.params.keyword)
+      searchKeyword(this.$route.query.keyword)
         .then(response => {
           console.log(response)
-          this.articles = response.data
+          this.articles = response.data.data
         })
         .catch(err => {
           throw err
@@ -57,9 +60,6 @@ export default {
   },
   created () {
     this.reqDate()
-  },
-  mounted () {
-    this.requireTokenAsync()
   }
 }
 </script>
@@ -69,7 +69,7 @@ export default {
   height: 100%;
   .search {
     box-sizing: border-box;
-    padding-top: 110px;
+    // padding-top: 110px;
     padding-bottom: 120px;
     min-height: 100%;
     .search_result {

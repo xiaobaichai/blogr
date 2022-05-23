@@ -19,9 +19,9 @@
                         <span class="info-time">{{a}}</span>
           </div>
         </div>
-        <div class="item-r fr">
+        <!-- <div class="item-r fr">
           <img v-lazy="item.a_imgSrc" alt width="120" height="100" />
-        </div>
+        </div> -->
       </router-link>
     </div>
   </div>
@@ -52,7 +52,7 @@ export default {
   }
   //item左侧简介
   .item-l {
-    width: 540px;
+    width: 680px;
     .row-type {
       margin-bottom: 8px;
       .type-icon {

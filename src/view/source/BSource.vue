@@ -2,14 +2,12 @@
   <div class="source">
     <div class="category_outer">
       <ul class="source_category">
-        <li v-for="item in sourceCategory" :key="item" @click="getSource(item)">{{item}}</li>
+        <li :class="activeClass==index ? 'active':''" v-for="(item,index) in sourceCategory" :key="item" @click="getSource(index)">{{item}}</li>
       </ul>
     </div>
     <div class="source_list">
-      <a
-        class="source_item"
-        v-for="item in sourceCategoryList"
-        :key="item.title"
+      <div class="source_item" v-for="item in sourceCategoryList" :key="item.title">
+        <a
         :href="item.link"
         target="_blank"
       >
@@ -21,6 +19,7 @@
           <p>{{item.description}}</p>
         </div>
       </a>
+      </div>
     </div>
   </div>
 </template>
@@ -32,15 +31,20 @@ import { getCategorySource } from '@/api/index.js'
 export default {
   data () {
     return {
-      sourceCategory: ['information', 'material', 'efficiency'],
-      sourceCategoryList: []
+      sourceCategory: ['相关资讯', '素材资源', '效率提升'],
+      sourceCategoryItem: ['information', 'material', 'efficiency'],
+      sourceCategoryList: [],
+      activeClass: 0
     }
   },
   methods: {
-    getSource (item) {
+    getSource (index) {
+      const item = this.sourceCategoryItem[index]
       getCategorySource(item)
         .then(response => {
           this.sourceCategoryList = response.data.data
+          // 点击目标切换样式
+          this.activeClass = index
         })
         .catch(err => {
           throw err
@@ -48,7 +52,7 @@ export default {
     }
   },
   mounted () {
-    getCategorySource(this.sourceCategory[0])
+    getCategorySource('information')
       .then(response => {
         this.sourceCategoryList = response.data.data
       })
@@ -76,7 +80,15 @@ export default {
         height: 60px;
         line-height: 60px;
         padding: 0 22px;
-        color: #3d5deb;
+        color: #35363a;
+        font-size: 15px;
+        &:hover {
+          cursor: pointer;
+          color: #297ae6;
+        }
+      }
+      .active {
+        color: #297ae6;
       }
     }
   }

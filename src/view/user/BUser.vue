@@ -1,7 +1,7 @@
 <template>
   <div class="profile">
     <!-- 登陆状态 -->
-    <div class="user" v-if="userId">
+    <div class="user" v-show="userId">
       <div class="user_l">
         <div class="avatar">
           <img :src="userInfo.avatar_src" alt width="100" height="100" />
@@ -25,7 +25,7 @@
       </div>
     </div>
     <!-- 未登录状态 -->
-    <b-login v-else></b-login>
+    <b-login v-show="!userId"></b-login>
   </div>
 </template>
 

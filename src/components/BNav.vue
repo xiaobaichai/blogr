@@ -33,6 +33,9 @@ export default {
     userInfo: function () {
       return this.$store.state.userInfo
     }
+  },
+  created () {
+    this.$store.dispatch('getUserAcountAsync')
   }
 }
 </script>

@@ -10,6 +10,7 @@
         layout="prev, pager, next"
         background
         @current-change="handleCurrentChange"
+        :hide-on-single-page="true"
         :page-size="8"
         :total="total"
       ></el-pagination>

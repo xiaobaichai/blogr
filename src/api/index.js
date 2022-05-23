@@ -34,7 +34,7 @@ const axios = ({ url, method = 'GET', params = {}, data = {}, headers = {} }) =>
 // 获取轮播图
 export const getCarousel = () => {
   return axios({
-    url: '/api/arousel',
+    url: '/api/carousel',
     method: 'get'
   })
 }
@@ -161,7 +161,8 @@ export const leaveMessage = (data) => {
     url: '/api/leave_message',
     method: 'post',
     data: {
-      user_id: data.user_id,
+      nickname: data.nickname,
+      userId: data.userId,
       content: data.content
     }
   })
@@ -254,12 +255,12 @@ export const getArticleDetail = () => {
 }
 
 // 搜索结果页============================================================
-export const searchArticle = (data) => {
+export const searchKeyword = (keyword) => {
   return axios({
-    url: '/api/search_article',
-    method: 'post',
-    data: {
-      keywords: data.keywords
+    url: '/api/search_keyword',
+    method: 'get',
+    params: {
+      keyword: keyword
     }
   })
 }

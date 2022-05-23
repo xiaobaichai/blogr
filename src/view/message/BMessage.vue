@@ -3,30 +3,45 @@
     <div class="message_l">
       <div class="leave_msg">
         <p>留言</p>
-        <el-row class="user_info" :gutter="20">
+        <!-- <el-row class="user_info" :gutter="20">
           <el-col :span="12">
             <el-input placeholder="昵称" v-model="nickname"></el-input>
           </el-col>
           <el-col :span="12">
             <el-input placeholder="邮箱" v-model="email"></el-input>
           </el-col>
-        </el-row>
+        </el-row> -->
         <el-input class="user_msg" placeholder="留言内容" type="textarea" :rows="6" v-model="content"></el-input>
         <el-button class="msg_button" type="primary" style="width:100%" @click="submit">提交留言</el-button>
       </div>
       <div class="new_msg">
         <p>最新留言</p>
-        <div class="msg-item" v-for="item in msgs" :key="item.m_time">
-          <div class="msg-time">{{ item.m_rTime }}</div>
-          <div class="msg-content">
-            <div class="user-content">
+        <div class="msg" >
+          <div class="msg-item" v-for="item in msgs" :key="item.m_time">
+            <!-- <div class="user-content">
               <span class="nickname">{{ item.m_nickname + ": " }}</span>
               <span class="msg">{{ item.content }}</span>
             </div>
             <div class="admin-content">
               <span class="admin">管理员：</span>
               <span class="admin-content">{{ item.m_response }}</span>
+            </div> -->
+            <!-- 用户信息 -->
+            <div class="main-message">
+              <div class="main-message-user">
+                <div class="avatar">
+                  <img :src="item.avatar_src" alt="" width="40px" height="40px">
+                </div>
+                <div class="username">{{item.nickname}}</div>
+              </div>
+              <!-- 用户留言内容 -->
+              <div class="main-message-content">{{item.content}}</div>
             </div>
+            <!-- 其他用户回复 -->
+            <div class="reply-message" v-if="item.reply">
+              <span>管理员：</span>{{item.reply}}
+            </div>
+            <br>
           </div>
         </div>
       </div>
@@ -35,6 +50,7 @@
         layout="prev, pager, next"
         :page-size="8"
         :total="total"
+        :hide-on-single-page="true"
         @current-change="getPageMsg"
       ></el-pagination>
     </div>
@@ -70,8 +86,6 @@ export default {
   name: 'bMessage',
   data () {
     return {
-      nickname: '',
-      email: '',
       content: '',
       msgs: [],
       total: 0
@@ -81,26 +95,31 @@ export default {
     // 提交留言
     submit () {
       // 表单校验
-      if (this.nickname === '') {
-        this.$message('请输入昵称')
-        return
-      }
-      if (
-        !/\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/.test(
-          this.email
-        )
-      ) {
-        this.$message('请输入正确邮箱')
-        return
-      }
+      // if (this.nickname === '') {
+      //   this.$message('请输入昵称')
+      //   return
+      // }
+      // if (
+      //   !/\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/.test(
+      //     this.email
+      //   )
+      // ) {
+      //   this.$message('请输入正确邮箱')
+      //   return
+      // }
       if (this.content === '') {
         this.$message('请输入留言内容')
         return
       }
-      leaveMessage(this.nickname, this.email, this.content)
+      const data = {
+        nickname: this.$store.state.userInfo.nickname,
+        userId: this.$store.state.userId,
+        content: this.content
+      }
+      leaveMessage(data)
         .then(response => {
-          if (response.code === 1) {
-            this.$message(response.message)
+          if (response.data.code === 1) {
+            this.$message(response.data.message)
           }
           // 清空留言
           this.nickname = ''
@@ -117,6 +136,7 @@ export default {
       getNewMessage(1, 8)
         .then(response => {
           this.msgs = response.data.data
+          console.log(this.msgs)
         })
         .catch(err => {
           throw err
@@ -140,6 +160,11 @@ export default {
         })
     }
   },
+  computed: {
+    avatar: function () {
+      return this.$store.state.userInfo
+    }
+  },
   created () {
     this.reqData()
   }
@@ -154,6 +179,7 @@ export default {
   justify-content: space-around;
   .message_l {
     width: 780px;
+    //写留言部分
     .leave_msg {
       p {
         font-size: 20px;
@@ -170,55 +196,51 @@ export default {
         margin-bottom: 35px;
       }
     }
+    //最新留言部分
     .new_msg {
-      // 最近留言
       p {
-        font-size: 19px;
-        font-weight: 600;
-        margin-bottom: 27px;
-        // color: rgb(78, 61, 235);
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 20px;
       }
-      .msg-item {
-        margin-bottom: 22px;
-        width: 780px;
-        border-bottom: 1px dashed #cccccc;
-        .msg-time {
-          margin-bottom: 10px;
-          font-size: 13px;
-          color: #999999;
-        }
-        .msg-content {
-          box-sizing: border-box;
-          margin-bottom: 15px;
-          width: 780px;
-          padding: 16px 18px 16px 11px;
-          border-left: 3px solid #cccccc;
-          background-color: #fafafa;
-          .user-content {
-            font-size: 14px;
-            margin-bottom: 12px;
-            .nickname {
-              font-weight: 600;
-              color: rgb(36, 139, 207);
+      .msg {
+        background-color: #fff;
+        border-radius: 5px;
+        .msg-item {
+          .main-message {
+            margin-bottom: 10px;
+            .main-message-user {
+              height: 50px;
+              line-height: 50px;
+              display: flex;
+              justify-content: space-between;
+              .avatar {
+                padding-left: 20px;
+                padding-right: 10px;
+                color: #252933;
+                // background-color: rgb(88, 43, 161);
+                img {
+
+                  vertical-align: middle;
+                  border-radius: 20px;
+                }
+              }
+              .username {
+                width: 710px;
+                font-size: 15px;
+              }
             }
-            .msg {
-              word-break: normal;
-              // display: block;
-              white-space: pre-wrap;
-              word-wrap: break-word;
+            .main-message-content {
+              padding-left: 70px;
+              color: #515767;
+              font-size: 14px;
             }
           }
-          .admin-content {
-            font-size: 14px;
-            .admin {
-              font-weight: 600;
-              color: rgb(36, 139, 207);
-            }
-            .admin-content {
-              word-break: normal;
-              // display: block;
-              white-space: pre-wrap;
-              word-wrap: break-word;
+          .reply-message {
+            padding-left: 70px;
+            span {
+              color: #2466bb;
+              font-size: 15px;
             }
           }
         }

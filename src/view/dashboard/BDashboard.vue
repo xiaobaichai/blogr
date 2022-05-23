@@ -16,10 +16,10 @@ export default {
   components: { BNav, BBottom },
   methods: {
 
-  },
-  mounted () {
-    this.$store.dispatch('getUserAcountAsync')
   }
+  // created () {
+  //   this.$store.dispatch('getUserAcountAsync')
+  // }
 }
 </script>
 

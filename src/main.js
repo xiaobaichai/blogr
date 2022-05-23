@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import { Carousel, Pagination, Row, Col, Input, Button, Message } from 'element-ui'
+import { Carousel, CarouselItem, Pagination, Row, Col, Input, Button, Message } from 'element-ui'
 
 Vue.config.productionTip = false
 
@@ -11,6 +11,7 @@ Message.install = function (Vue, options) {
 }
 
 Vue.use(Carousel)
+Vue.use(CarouselItem)
 Vue.use(Pagination)
 Vue.use(Row)
 Vue.use(Col)

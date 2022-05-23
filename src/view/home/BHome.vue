@@ -4,7 +4,7 @@
     <div class="carousel">
       <div class="carousel-l">
         <el-carousel :interval="2000" type="card" height="330px">
-          <el-carousel-item v-for="item in carousel" :key="item.id">
+          <el-carousel-item v-for="item in 4" :key="item">
             <router-link :to="'/article/' + item.c_link" target="_blank">
               <img :src="item.c_imgSrc" alt width="790" height="330" />
             </router-link>
@@ -25,7 +25,7 @@
           </div>
           <div class="search-input">
             <i class="el-icon-search"></i>
-            <input type="text" v-model="keyword" placeholder="搜索文章" @keypress="search($event)" />
+            <input type="text" v-model="keyword" placeholder="搜索文章" @keyup.enter="search()" />
           </div>
         </div>
         <div class="search-img">
@@ -85,7 +85,7 @@
               </div>
               <div class="admin-content">
                 <span class="admin">管理员：</span>
-                <span class="response">{{ item.response }}</span>
+                <span class="response">{{ item.reply }}</span>
               </div>
             </div>
           </div>
@@ -187,19 +187,17 @@ export default {
       }) // 获取首页轮播图
     },
     // 搜索
-    search ($event) {
-      const keyword = this.keyword
-      if (event.keyCode === '13') {
-        const routeUrl = this.$router.resolve({
-          path: '/searchKeyword/' + keyword
-          // params: { keyword }
-        })
-        window.open(routeUrl.href, '_blank')
-      }
+    search () {
+      const routeUrl = this.$router.resolve({
+        path: '/searchKeyword',
+        query: { keyword: this.keyword }
+      })
+      window.open(routeUrl.href, '_blank')
     }
   },
   created () {
     this.reqDate()
+    console.log(this.$data)
   }
 }
 </script>
@@ -210,16 +208,16 @@ export default {
   margin: 0 auto;
   //轮播图板块
   .carousel {
-    margin-bottom: 20px;
+    margin-bottom: 35px;
     display: flex;
     .carousel-l {
       width: 790px;
-      height: 330px;
+      // height: 330px;
       margin-right: 10px;
       border-radius: 5px;
       box-shadow: 0 5px 8px 0 rgba(7, 17, 27, 0.3);
-      background-color: #fff;
-      img {
+      background-color: rgb(35, 195, 216);
+  img {
         border-radius: 5px;
       }
     }
@@ -288,16 +286,15 @@ export default {
     width: 100%;
     margin: 0 auto;
     display: flex;
+    justify-content: space-between;
     .content-l {
       box-sizing: border-box;
       padding: 10px 0 0 10px;
       width: 790px;
       height: 100%;
-      margin-right: 10px;
       background-color: #fff;
       border-radius: 5px;
       overflow: hidden;
-
       p {
         font-size: 19px;
         font-weight: 700;
@@ -312,12 +309,15 @@ export default {
       box-sizing: border-box;
       width: 400px;
       height: 100%;
+      position: relative;
+      top:-30px;
       padding: 10px 10px 0 10px;
       background-color: #fff;
       border-radius: 5px;
       //热门板块
       .hot {
         margin-bottom: 40px;
+        width: 100%;
         p {
           font-size: 19px;
           font-weight: 600;

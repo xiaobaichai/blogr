@@ -39,7 +39,7 @@ const routes = [
   },
   // 搜索结果页面
   {
-    path: '/search/:keyword',
+    path: '/searchKeyword',
     component: BSearch
   }
 
@@ -50,7 +50,7 @@ const router = new VueRouter({
   routes
 })
 
-// 配置Nprogress
+// 路由守卫配置Nprogress
 router.beforeEach((to, from, next) => {
   Npregress.start()
   next()
