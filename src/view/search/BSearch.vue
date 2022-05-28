@@ -4,7 +4,7 @@
     <div class="search">
       <div class="search_result">
         <div class="result_center">
-          <p class="tag">{{$route.params.tag}}</p>
+          <!-- <p class="tag">{{$route.params.tag}}</p> -->
           <p class="result">{{'找到了'+articles.length+'条与‘'+keyword+'’相关的文章'}}</p>
         </div>
       </div>
@@ -50,7 +50,6 @@ export default {
     reqDate () {
       searchKeyword(this.$route.query.keyword)
         .then(response => {
-          console.log(response)
           this.articles = response.data.data
         })
         .catch(err => {
@@ -100,6 +99,9 @@ export default {
       justify-content: space-between;
       .content_l {
         width: 790px;
+        padding: 15px 0 15px 10px;
+        background-color: #fff;
+        border-radius: 5px;
         p {
           font-size: 19px;
           font-weight: 700;

@@ -57,7 +57,7 @@
     <div class="message_r">
       <div class="message_border">
         <p class="about">关于blogR</p>
-        <div class="about_me">
+        <!-- <div class="about_me">
           <p>邮箱</p>
           <p>1750596910@qq.com</p>
           <p>博客</p>
@@ -68,9 +68,9 @@
           <p>
             <a href="https://github.com/xiaobaichai" target="_blank">https://github.com/xiaobaichai</a>
           </p>
-        </div>
+        </div> -->
         <div class="description_outer">
-          <p class="description">欢迎来到我的博客，这是一个用于练习和记录前端知识的个人博客,目前还有部分内容尚待完善。。。</p>
+          <p class="description">欢迎来到我的博客，这是一个用于练习和记录前端知识的个人博客,在审美设计、程序设计或者其他方面肯定还有许多的缺陷和不足。如果你有一些好的想法、创意或者寻求帮助的话，可以在这里留言。</p>
           <p class="description"></p>
         </div>
       </div>
@@ -136,7 +136,6 @@ export default {
       getNewMessage(1, 8)
         .then(response => {
           this.msgs = response.data.data
-          console.log(this.msgs)
         })
         .catch(err => {
           throw err
@@ -206,6 +205,7 @@ export default {
       .msg {
         background-color: #fff;
         border-radius: 5px;
+        padding-top: 10px;
         .msg-item {
           .main-message {
             margin-bottom: 10px;
@@ -220,14 +220,14 @@ export default {
                 color: #252933;
                 // background-color: rgb(88, 43, 161);
                 img {
-
                   vertical-align: middle;
                   border-radius: 20px;
                 }
               }
               .username {
                 width: 710px;
-                font-size: 15px;
+                font-size: 16px;
+                color: #252933;
               }
             }
             .main-message-content {
@@ -238,9 +238,11 @@ export default {
           }
           .reply-message {
             padding-left: 70px;
+            font-size: 14px;
+            color: #757474;
             span {
               color: #2466bb;
-              font-size: 15px;
+              font-size: 14px;
             }
           }
         }
@@ -260,7 +262,7 @@ export default {
     .message_border {
       // border: 1px solid #eeeeee;
       padding: 23px 29px;
-      padding-bottom: 100px;
+      padding-bottom: 190px;
       border-radius: 4px;
       .about {
         font-size: 21px;

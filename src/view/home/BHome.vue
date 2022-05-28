@@ -3,11 +3,11 @@
     <!-- 轮播图 -->
     <div class="carousel">
       <div class="carousel-l">
-        <el-carousel :interval="2000" type="card" height="330px">
-          <el-carousel-item v-for="item in 4" :key="item">
-            <router-link :to="'/article/' + item.c_link" target="_blank">
-              <img :src="item.c_imgSrc" alt width="790" height="330" />
-            </router-link>
+        <el-carousel :interval="2000" height="330px">
+          <el-carousel-item v-for="item in carousel" :key="item.src">
+            <a :href="item.link" target="_blank">
+              <img :src="item.src" alt width="790" height="330" />
+            </a>
           </el-carousel-item>
         </el-carousel>
       </div>
@@ -54,8 +54,8 @@
             <router-link :to="'/article/' + item.id" tag="a" target="_blank">
               <div class="title">{{ item.title }}</div>
               <div class="info">
-                <span class="time">{{ item.a_time | getDate }}</span>
-                <span class="view">{{ "浏览" + item.a_views }}</span>
+                <span class="time">{{ item.date | dateFormat('yyyy-MM-dd') }}</span>
+                <span class="view">{{ "浏览 " + item.read_count }}</span>
               </div>
             </router-link>
           </div>
@@ -146,7 +146,7 @@ export default {
     handleCurrentChange (page) {
       getNewArticle(page, 8) // 请求第page页 8篇
         .then(response => {
-          this.articles = response.data.data
+          this.articles = response.data.data.reverse()
         })
         .catch(err => {
           throw err
@@ -163,12 +163,12 @@ export default {
         })
       getNewArticle(1, 8) // 获取首页最新文章第一页 8篇
         .then(response => {
-          this.articles = response.data.data
+          this.articles = response.data.data.reverse()
         })
         .catch(err => {
           throw err
         })
-      getHotArticle(4) // 获取首页热门文章 4篇
+      getHotArticle(5) // 获取首页热门文章 4篇
         .then(response => {
           this.hotArticles = response.data.data
         })
@@ -183,7 +183,7 @@ export default {
           throw err
         })
       getCarousel().then(response => {
-        this.carousel = response.data
+        this.carousel = response.data.data
       }) // 获取首页轮播图
     },
     // 搜索
@@ -197,7 +197,7 @@ export default {
   },
   created () {
     this.reqDate()
-    console.log(this.$data)
+    // console.log(this.$data)
   }
 }
 </script>
@@ -216,7 +216,7 @@ export default {
       margin-right: 10px;
       border-radius: 5px;
       box-shadow: 0 5px 8px 0 rgba(7, 17, 27, 0.3);
-      background-color: rgb(35, 195, 216);
+      // background-color: rgb(35, 195, 216);
   img {
         border-radius: 5px;
       }

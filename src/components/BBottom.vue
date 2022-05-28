@@ -1,5 +1,5 @@
 <template>
-  <div class="footer">
+  <div class="footer" ref="footer">
     <!-- <div class="footer-nav">
       <ul>
         <li>
@@ -21,7 +21,16 @@
 
 <script>
 export default {
-
+  mounted () {
+    // 判断footer的位置，在页面高度不足时让其置底
+    // console.log(this.$refs.footer.offsetTop)
+    // if (this.$refs.footer.offsetTop < 720) {
+    //   this.$refs.footer.style.position = 'fixed'
+    //   this.$refs.footer.style.bottom = '0'
+    // }
+    // console.log(this.$refs.footer.style.position)
+    // console.log(this.$refs.footer.style.bottom)
+  }
 }
 </script>
 

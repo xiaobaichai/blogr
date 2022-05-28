@@ -1,22 +1,25 @@
 <template>
   <div>
-    <div class="item-info clearfix" v-for="item in articles" :key="item.a_time">
-      <router-link :to="'/article/'+item.a_id" tag="a" target="_blank">
+    <div class="item-info clearfix" v-for="item in articles" :key="item.id">
+      <router-link :to="'/article/'+item.id" tag="a" target="_blank">
         <div class="item-l fl">
           <div class="row-type">
             <span class="type-icon"></span>
-            <span class="type-content">{{item.tag}}</span>
+            <span class="type-tag">{{item.tag}}</span>
+            <span class="type-date">{{item.date | dateFormat('yyyy-MM-dd')}}</span>
           </div>
           <div class="row-title">{{item.title}}</div>
-          <div class="row-brief">{{item.pre_content}}</div>
+          <!-- <div class="row-brief">{{item.pre_content}}</div> -->
+          <div class="row-brief" v-html="item.pre_content"></div>
+          <!-- <div class="row-brief" v-html="item.pre_content.length > 50 ? item.pre_content.slice(0,50)+'...' :item.pre_content"></div> -->
           <div class="row-info">
             <i class="iconfont icon-eye"></i>
             <span class="info-view">{{item.read_count}}</span>
-            <i class="iconfont icon-icon"></i>
+            <!-- <i class="iconfont icon-icon"></i>
             <span class="info-agree">{{item.read_count}}</span>
             <i class="iconfont icon-shoucang"></i>
-            <span class="info-collection">{{item.read_count}}</span>
-                        <span class="info-time">{{a}}</span>
+            <span class="info-collection">{{item.read_count}}</span> -->
+            <!-- <span class="info-time">{{a}}</span> -->
           </div>
         </div>
         <!-- <div class="item-r fr">
@@ -45,7 +48,7 @@ export default {
   margin-bottom: 15px;
   box-sizing: border-box;
   width: 790px;
-  padding: 0 30px 18px 10px;
+  padding: 0 30px 8px 10px;
   border-bottom: 1px solid #eeeeee;
   :hover > .row-title {
     color: rgb(32, 127, 236);
@@ -73,10 +76,10 @@ export default {
       margin-bottom: 12px;
     }
     .row-brief {
-      height: 36px;
+      height: 42px;
       font-size: 14px;
       color: #999999;
-      // margin-bottom: 15px;
+      margin-bottom: 5px;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
@@ -97,8 +100,13 @@ export default {
         margin-right: 15px;
       }
     }
-    .type-content {
-      font-size: 12px;
+    .type-tag {
+      font-size: 14px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+    .type-date {
+      font-size: 10px;
       margin-left: 8px;
       vertical-align: middle;
     }

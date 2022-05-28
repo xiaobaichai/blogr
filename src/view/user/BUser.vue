@@ -60,7 +60,7 @@ export default {
         })
     },
     upload () {
-      console.log('onchange')
+      // console.log('onchange')
       const formdata = new FormData()
       formdata.append('file', this.$refs.file.files[0])
       formdata.append('userId', this.userId)

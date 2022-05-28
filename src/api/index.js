@@ -181,16 +181,16 @@ export const leaveMessageComment = (data) => {
 }
 
 // 资源页===================================================================
-// 获取所有分类的资源
-export const getCategorySource = (item) => {
-  return axios({
-    url: '/api/category_source',
-    method: 'get',
-    params: {
-      category: item
-    }
-  })
-}
+// 获取所有分类的资源（暂时使用本地固定数据）
+// export const getCategorySource = (item) => {
+//   return axios({
+//     url: '/api/category_source',
+//     method: 'get',
+//     params: {
+//       category: item
+//     }
+//   })
+// }
 
 // 注册登录页===============================================================
 // 注册
@@ -247,10 +247,24 @@ export const uploadAvatar = (formdata) => {
 }
 
 // 文章详情页===========================================================
-export const getArticleDetail = () => {
+export const getArticle = (id) => {
   return axios({
-    url: '/api/article_detail',
-    method: 'get'
+    url: '/api/getArticle',
+    method: 'get',
+    params: {
+      id: id
+    }
+  })
+}
+
+export const updateReadCount = (id, readCount) => {
+  return axios({
+    url: '/api/updateReadCount',
+    method: 'get',
+    params: {
+      id: id,
+      readCount: readCount
+    }
   })
 }
 

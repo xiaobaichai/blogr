@@ -5,7 +5,7 @@
         <li class="choosen" data-type="all">全部</li>
         <li v-for="item in category" :key="item" :data-type="item">{{item}}</li>
       </ul>
-      <item-article :articles="articles"></item-article>
+      <div class="content"><item-article :articles="articles"></item-article></div>
       <el-pagination
         layout="prev, pager, next"
         background
@@ -16,7 +16,7 @@
       ></el-pagination>
     </div>
     <div class="category_r">
-      推荐
+      推荐......
     </div>
   </div>
 </template>
@@ -116,12 +116,18 @@ export default {
     padding: 10px 0 0 10px;
     box-sizing: border-box;
     border-radius: 5px;
+    .content {
+      background-color: #fff;
+      border-radius: 5px;
+      padding: 15px 0 15px 10px;
+      margin-bottom: 30px;
+    }
     .category_list {
+      width: 790px;
       display: inline-block;
       margin-bottom: 38px;
       height: 16px;
       line-height: 16px;
-      // padding-left: 15px;
       .choosen {
         font-size: 16px;
         font-weight: 700;
@@ -149,51 +155,50 @@ export default {
   }
   .category_r {
     width: 380px;
-    // height: 100%;
-    // background-color: #fff;
+    color: rgb(151, 149, 149);
     border-left: 1px solid #dddbdb;
     padding: 10px 0 0 10px;
     box-sizing: border-box;
     // border-radius: 5px;
-    .hot {
-      margin-bottom: 40px;
-      p {
-        font-size: 19px;
-        font-weight: 600;
-        margin-bottom: 27px;
-        color: rgb(78, 61, 235);
-      }
-      .hot-item {
-        display: flex;
-        justify-content: space-between;
-        width: 380px;
-        border-bottom: 1px solid #eeeeee;
-        .hot_l {
-          box-sizing: border-box;
-          width: 95px;
-          padding-left: 5px;
-        }
-        .hot_r {
-          width: 245px;
-          a {
-            display: block;
-            .title {
-              font-size: 14px;
-              font-weight: 600;
-              margin-bottom: 13px;
-            }
-            .info {
-              font-size: 13px;
-              color: #999999;
-              margin-bottom: 14px;
-              .time {
-                margin-right: 8px;
-              }
-            }
-          }
-        }
-      }
-    }
+    // .hot {
+    //   margin-bottom: 40px;
+    //   p {
+    //     font-size: 19px;
+    //     font-weight: 600;
+    //     margin-bottom: 27px;
+    //     color: rgb(78, 61, 235);
+    //   }
+    //   .hot-item {
+    //     display: flex;
+    //     justify-content: space-between;
+    //     width: 380px;
+    //     border-bottom: 1px solid #eeeeee;
+    //     .hot_l {
+    //       box-sizing: border-box;
+    //       width: 95px;
+    //       padding-left: 5px;
+    //     }
+    //     .hot_r {
+    //       width: 245px;
+    //       a {
+    //         display: block;
+    //         .title {
+    //           font-size: 14px;
+    //           font-weight: 600;
+    //           margin-bottom: 13px;
+    //         }
+    //         .info {
+    //           font-size: 13px;
+    //           color: #999999;
+    //           margin-bottom: 14px;
+    //           .time {
+    //             margin-right: 8px;
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
   }
 }
 </style>

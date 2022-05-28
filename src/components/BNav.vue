@@ -12,7 +12,7 @@
           <router-link to="/message" tag="li" active-class="active">留言板</router-link>
           <router-link to="/source" tag="li" active-class="active">资源推荐</router-link>
           <router-link to="/user" tag="li" active-class="active" v-if="userId">
-            <img class="avatar" :src="userInfo.avatar_src" alt width="50" height="50" />
+            <img class="avatar" :src="userInfo.avatar_src" alt width="40" height="40" />
           </router-link>
           <router-link to="/user" tag="li" active-class="active" v-else>登录/注册</router-link>
         </ul>
